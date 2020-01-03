@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "900023636624",
+    "firebase_url": "https://fluttershare-370e3.firebaseio.com",
+    "project_id": "fluttershare-370e3",
+    "storage_bucket": "fluttershare-370e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900023636624:android:6b50f8e9f7accce2277e15",
+        "android_client_info": {
+          "package_name": "com.rinotc.fluttershare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900023636624-nnm18l0liqsp1bd13kihqljq2s1r8oci.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpVxshrfecdgJxp7LYbqh7-8uhxiP45Rg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900023636624-nnm18l0liqsp1bd13kihqljq2s1r8oci.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "900023636624-74m1vvo9js7p9hn6seple6qfnbrrdo1s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rinotc.fluttershare"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
