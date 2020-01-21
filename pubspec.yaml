@@ -20,19 +20,19 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cloud_firestore: ^0.9.7+2
+  cloud_firestore:  ^0.13.0+1
   image_picker: ^0.6.0+2
-  firebase_core: ^0.3.0
-  firebase_storage: ^2.1.0+1
-  firebase_auth: ^0.8.3
-  google_sign_in: ^4.0.1+1
+  firebase_core: ^0.4.3+2
+  firebase_storage: ^3.1.1
+  firebase_auth: ^0.15.3+1
+  google_sign_in: ^4.1.1
   geolocator: 5.0.1
-  uuid: ^2.0.0
+  uuid: ^2.0.4
   image: ^2.0.7
   animator: ^1.0.0+3
   cupertino_icons: ^0.1.2
-  path_provider: ^0.5.0+1
-  firebase_messaging: ^4.0.0+1
+  path_provider: ^1.5.1
+  firebase_messaging:  ^6.0.9
   timeago: 2.0.17
   cached_network_image:
   flutter_svg:
