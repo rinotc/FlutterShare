@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,11 @@ import 'package:flutter_share/pages/activity_feed.dart';
 import 'package:flutter_share/pages/create_account.dart';
 import 'package:flutter_share/pages/profile.dart';
 import 'package:flutter_share/pages/search.dart';
+import 'package:flutter_share/pages/timeline.dart';
 import 'package:flutter_share/pages/upload.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+final FirebaseAuth _auth = FirebaseAuth.instance;
 final googleSignIn = GoogleSignIn();
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 final usersRef = Firestore.instance.collection('users');
@@ -18,8 +21,10 @@ final commentsRef = Firestore.instance.collection('comments');
 final activityFeedRef = Firestore.instance.collection('feed');
 final followersRef = Firestore.instance.collection('followers');
 final followingRef = Firestore.instance.collection('following');
+final timelineRef = Firestore.instance.collection('timeline');
 final DateTime timestamp = DateTime.now();
 User currentUser;
+FirebaseUser firebaseCurrentUser;
 
 class Home extends StatefulWidget {
   @override
@@ -56,10 +61,9 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  handleSignIn(GoogleSignInAccount account) {
+  handleSignIn(GoogleSignInAccount account) async {
     if (account != null) {
-      print('User signed in!: $account');
-      createUserInFirestore();
+      await createUserInFirestore();
       setState(() {
         isAuth = true;
       });
@@ -70,7 +74,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  createUserInFirestore() async {
+  void createUserInFirestore() async {
     // 1) check if user exists in users collection in database (according to their id)
     final GoogleSignInAccount user = googleSignIn.currentUser;
     DocumentSnapshot doc = await usersRef.document(user.id).get();
@@ -90,17 +94,32 @@ class _HomeState extends State<Home> {
         'bio': '',
         'timestamp': timestamp,
       });
+      // make new user their own follower (to include their posts in their timeline)
+      await followersRef
+          .document(user.id)
+          .collection('userFollowers')
+          .document(user.id)
+          .setData({});
 
       doc = await usersRef.document(user.id).get();
     }
 
     currentUser = User.fromDocument(doc);
-    print(currentUser);
-    print(currentUser.username);
   }
 
-  login() {
-    googleSignIn.signIn();
+  login() async {
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      idToken: googleSignInAuthentication.idToken,
+      accessToken: googleSignInAuthentication.accessToken,
+    );
+
+    final AuthResult authResult = await _auth.signInWithCredential(credential);
+    print(authResult.toString());
+
+    firebaseCurrentUser = await _auth.currentUser();
   }
 
   logout() {
@@ -125,11 +144,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: PageView(
         children: <Widget>[
-//          Timeline(),
-          RaisedButton(
-            child: Text('Logout'),
-            onPressed: logout,
-          ),
+          Timeline(currentUser: currentUser),
           ActivityFeed(),
           Upload(currentUser: currentUser),
           Search(),

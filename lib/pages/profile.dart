@@ -176,7 +176,9 @@ class _ProfileState extends State<Profile> {
         .document(currentUserId)
         .get()
         .then((doc) {
-      doc.reference.delete();
+      if (doc.exists) {
+        doc.reference.delete();
+      }
     });
     // remove following
     followingRef
